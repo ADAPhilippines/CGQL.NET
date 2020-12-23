@@ -1,0 +1,42 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+
+namespace CGQL.NET.Server.Data.Queries
+{
+    public static partial class StakeDeregistrationExtensions
+    {
+        #region Generated Extensions
+        public static IQueryable<CGQL.NET.Server.Data.Entities.StakeDeregistration> ByAddrId(this IQueryable<CGQL.NET.Server.Data.Entities.StakeDeregistration> queryable, long addrId)
+        {
+            return queryable.Where(q => q.AddrId == addrId);
+        }
+
+        public static CGQL.NET.Server.Data.Entities.StakeDeregistration GetByKey(this IQueryable<CGQL.NET.Server.Data.Entities.StakeDeregistration> queryable, long id)
+        {
+            if (queryable is DbSet<CGQL.NET.Server.Data.Entities.StakeDeregistration> dbSet)
+                return dbSet.Find(id);
+
+            return queryable.FirstOrDefault(q => q.Id == id);
+        }
+
+        public static ValueTask<CGQL.NET.Server.Data.Entities.StakeDeregistration> GetByKeyAsync(this IQueryable<CGQL.NET.Server.Data.Entities.StakeDeregistration> queryable, long id)
+        {
+            if (queryable is DbSet<CGQL.NET.Server.Data.Entities.StakeDeregistration> dbSet)
+                return dbSet.FindAsync(id);
+
+            var task = queryable.FirstOrDefaultAsync(q => q.Id == id);
+            return new ValueTask<CGQL.NET.Server.Data.Entities.StakeDeregistration>(task);
+        }
+
+        public static IQueryable<CGQL.NET.Server.Data.Entities.StakeDeregistration> ByTxId(this IQueryable<CGQL.NET.Server.Data.Entities.StakeDeregistration> queryable, long txId)
+        {
+            return queryable.Where(q => q.TxId == txId);
+        }
+
+        #endregion
+
+    }
+}

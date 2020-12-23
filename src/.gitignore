@@ -1,0 +1,5 @@
+bin/
+obj/
+generation.yml
+appsettings.Development.json
+appsettings.json
