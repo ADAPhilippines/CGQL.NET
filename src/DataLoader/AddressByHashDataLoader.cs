@@ -7,6 +7,7 @@ using GreenDonut;
 using HotChocolate.DataLoader;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using CGQL.NET.Server.Data.Entities;
 
 namespace CGQL.NET.Server
 {
@@ -29,8 +30,25 @@ namespace CGQL.NET.Server
         {
             await using CardanoDbContext dbContext =
                 _dbContextFactory.CreateDbContext();
+            
+            
+            var txIds = await dbContext.TxOuts.Include(o => o.Tx)
+                .Where(o => keys.Contains(o.Address))
+                .GroupBy(o => o.TxId)
+                .Select(g => g.Key).ToListAsync(cancellationToken);
+            
+            var txes = await dbContext.Txes
+                .Include(tx => tx.InTxIns)
+                    .ThenInclude(txIn => txIn.OutTx)
+                        .ThenInclude(tx2 => tx2.InTxIns)
+                .Include(tx => tx.TxOuts)
+                .Where(tx => txIds.Contains(tx.Id)).ToListAsync(cancellationToken);
+           
+                // .AsQueryable()
+                // .Include(tx => tx.InTxIns)
+                // .Include(tx => tx.OutTxIns)
 
-            var txOuts = await dbContext.TxOuts.Where(o => keys.Contains(o.Address)).ToListAsync(cancellationToken: cancellationToken);
+            var txOuts = await dbContext.TxOuts.Where(o => keys.Contains(o.Address)).ToListAsync(cancellationToken);
             return txOuts.GroupBy(o => o.Address).Select(o => new Address(o.Key, txOuts.Count)).ToDictionary(o => o.Hash);
         }
     }
