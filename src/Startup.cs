@@ -1,5 +1,6 @@
 using CGQL.NET.Server;
 using CGQL.NET.Server.Data;
+using GCQL.NET.Server.GraphQL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -24,13 +25,13 @@ namespace GCQL.NET.Server
         {
             services
                 .AddGraphQLServer()
-                .AddQueryType<Query>()
+                .AddQueryType(d => d.Name("Query"))
+                    .AddTypeExtension<AddressQuery>()
                 .AddFiltering()
-                // .AddType<AddressType>()
-                .AddDataLoader<BlockByNoDataLoader>()
                 .AddDataLoader<AddressDataLoader>();
 
-            services.AddPooledDbContextFactory<CardanoDbContext>(options => options.UseNpgsql(Configuration.GetValue<string>("ConnectionString")));
+            services
+                .AddPooledDbContextFactory<CardanoDbContext>(options => options.UseNpgsql(Configuration.GetValue<string>("ConnectionString")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

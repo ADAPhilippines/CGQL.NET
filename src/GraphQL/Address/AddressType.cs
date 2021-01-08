@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using CGQL.NET.Models;
 using CGQL.NET.Server.Data;
-using HotChocolate;
+using GCQL.NET.Server.GraphQL;
 using HotChocolate.Types;
 
-namespace CGQL.NET.Server
+namespace CGQL.NET.Server.GraphQL
 {
     public class AddressType : ObjectType<Address>
     {
@@ -17,7 +18,6 @@ namespace CGQL.NET.Server
                 .UseDbContext<CardanoDbContext>()
                 .Name("addresses");
         }
-
         private class AddressResolvers
         {
             public async Task<IEnumerable<Address>> GetAddressAsync(

@@ -1,4 +1,4 @@
-namespace CGQL.NET.Server
+namespace CGQL.NET.Models
 {
-    public record Address(string Hash, int TxCount);
+    public record Address(string Hash, int TxCount, long Balance);
 }
