@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CGQL.NET.Models;
 using CGQL.NET.Server.Data;
-using GCQL.NET.Server.GraphQL;
+using GCQL.NET.Server.GraphQL.DataLoaders;
 using HotChocolate.Types;
 
 namespace CGQL.NET.Server.GraphQL

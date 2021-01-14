@@ -1,14 +1,14 @@
- using System.Threading;
- using System.Threading.Tasks;
+using System.Threading;
+using System.Threading.Tasks;
 using CGQL.NET.Models;
-using CGQL.NET.Server;
+using GCQL.NET.Server.GraphQL.DataLoaders;
 using HotChocolate;
- using HotChocolate.Types;
+using HotChocolate.Types;
 
 namespace GCQL.NET.Server.GraphQL
 {
     [ExtendObjectType(Name = "Query")]
-    public class AddressQuery 
+    public class AddressQuery
     {
         public Task<Address> GetAddressAsync(
             string hash,

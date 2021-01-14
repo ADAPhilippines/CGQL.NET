@@ -1,6 +1,7 @@
 using CGQL.NET.Server;
 using CGQL.NET.Server.Data;
 using GCQL.NET.Server.GraphQL;
+using GCQL.NET.Server.GraphQL.DataLoaders;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;

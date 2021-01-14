@@ -9,7 +9,7 @@ using HotChocolate.DataLoader;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
-namespace CGQL.NET.Server
+namespace CGQL.NET.Server.GraphQL.DataLoaders
 {
     public class BlockByNoDataLoader : BatchDataLoader<int?, Block>
     {
