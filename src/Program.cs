@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace GCQL.NET.Server
+namespace CGQL.NET.Server
 {
     public class Program
     {

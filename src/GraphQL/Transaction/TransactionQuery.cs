@@ -8,11 +8,11 @@ using HotChocolate.Types;
 namespace CGQL.NET.Server.GraphQL
 {
     [ExtendObjectType(Name = "Query")]
-    public class AddressQuery
+    public class TransactionQuery
     {
-        public Task<Address> GetAddressAsync(
+        public Task<Transaction> GetTransactionAsync(
             string hash,
-            AddressDataLoader dataLoader,
+            TransactionDataLoader dataLoader,
             CancellationToken cancellationToken) => dataLoader.LoadAsync(hash, cancellationToken);
     }
 }

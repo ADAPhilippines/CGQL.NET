@@ -1,7 +1,7 @@
 using CGQL.NET.Server;
 using CGQL.NET.Server.Data;
-using GCQL.NET.Server.GraphQL;
-using GCQL.NET.Server.GraphQL.DataLoaders;
+using CGQL.NET.Server.GraphQL;
+using CGQL.NET.Server.GraphQL.DataLoaders;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace GCQL.NET.Server
+namespace CGQL.NET.Server
 {
     public class Startup
     {
@@ -28,8 +28,11 @@ namespace GCQL.NET.Server
                 .AddGraphQLServer()
                 .AddQueryType(d => d.Name("Query"))
                     .AddTypeExtension<AddressQuery>()
+                    .AddTypeExtension<TransactionQuery>()
                 .AddFiltering()
-                .AddDataLoader<AddressDataLoader>();
+                .AddType<AddressType>()
+                .AddDataLoader<AddressDataLoader>()
+                .AddDataLoader<TransactionDataLoader>();
 
             services
                 .AddPooledDbContextFactory<CardanoDbContext>(options => options.UseNpgsql(Configuration.GetValue<string>("ConnectionString")));

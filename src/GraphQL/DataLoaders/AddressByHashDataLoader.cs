@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using CGQL.NET.Models;
 
-namespace GCQL.NET.Server.GraphQL.DataLoaders
+namespace CGQL.NET.Server.GraphQL.DataLoaders
 {
     public class AddressDataLoader : BatchDataLoader<string, Address>
     {
@@ -52,7 +52,8 @@ namespace GCQL.NET.Server.GraphQL.DataLoaders
                             .Distinct()
                             .Where(o1 => o1 != 0)
                             .Count(),
-                        (long)txOuts.Where(o1 => o1.Address == o.Key && o1.TxInId == 0).Sum(o1 => o1.Value))
+                        (long)txOuts.Where(o1 => o1.Address == o.Key && o1.TxInId == 0).Sum(o1 => o1.Value),
+                        new List<Transaction>())
                 ).ToDictionary(o => o.Hash);
         }
     }

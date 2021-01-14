@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "GCQL.NET.Server": {
+    "CGQL.NET.Server": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,
