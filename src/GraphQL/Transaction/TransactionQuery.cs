@@ -12,7 +12,7 @@ namespace CGQL.NET.Server.GraphQL
     {
         public Task<Transaction> GetTransactionAsync(
             string hash,
-            TransactionDataLoader dataLoader,
+            TransactionByHashDataLoader dataLoader,
             CancellationToken cancellationToken) => dataLoader.LoadAsync(hash, cancellationToken);
     }
 }

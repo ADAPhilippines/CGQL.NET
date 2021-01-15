@@ -1,4 +1,4 @@
 namespace CGQL.NET.Models
 {
-    public record TxOutput(string Address, long Amount, int Index, string TxId);
+    public record TxOutput(string Address, long Amount, int Index, string TxHash);
 }

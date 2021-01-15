@@ -11,11 +11,11 @@ using CGQL.NET.Models;
 
 namespace CGQL.NET.Server.GraphQL.DataLoaders
 {
-    public class AddressDataLoader : BatchDataLoader<string, Address>
+    public class AddressByHashDataLoader : BatchDataLoader<string, Address>
     {
         private readonly IDbContextFactory<CardanoDbContext> _dbContextFactory;
 
-        public AddressDataLoader(
+        public AddressByHashDataLoader(
             IBatchScheduler batchScheduler,
             IDbContextFactory<CardanoDbContext> dbContextFactory)
             : base(batchScheduler)
@@ -38,23 +38,30 @@ namespace CGQL.NET.Server.GraphQL.DataLoaders
                 select new { o.Address, o.Value, TxInId = tx != null ? tx.TxInId : 0L, o.TxId }).ToListAsync(cancellationToken);
 
             return txOuts.GroupBy(o => o.Address).Select(o => 
-                    new Address(
-                        o.Key,
-                        txOuts
-                            .Where(o1 => o1.Address == o.Key)
-                            .GroupBy(o1 => o1.TxId)
-                            .Select(o1 => o1.Key)
-                            .ToList()
-                            .Concat(
-                                txOuts.Where(o1 => o1.Address == o.Key)
-                                .GroupBy(o1 => o1.TxInId)
-                                .Select(o1 => o1.Key))
-                            .Distinct()
-                            .Where(o1 => o1 != 0)
-                            .Count(),
-                        (long)txOuts.Where(o1 => o1.Address == o.Key && o1.TxInId == 0).Sum(o1 => o1.Value),
-                        new List<Transaction>())
-                ).ToDictionary(o => o.Hash);
+            {
+                var txIds = txOuts
+                    .Where(o1 => o1.Address == o.Key)
+                    .GroupBy(o1 => o1.TxId)
+                    .Select(o1 => o1.Key)
+                    .ToList()
+                    .Concat(
+                        txOuts.Where(o1 => o1.Address == o.Key)
+                        .GroupBy(o1 => o1.TxInId)
+                        .Select(o1 => o1.Key))
+                    .Distinct()
+                    .Where(o1 => o1 != 0);
+
+                var balance = (long)txOuts.Where(o1 => o1.Address == o.Key && o1.TxInId == 0).Sum(o1 => o1.Value);
+
+                var transactions = txIds.Select(id => new Transaction(id.ToString(), 
+                    default!, default!, default!, default!, default!, default!, default!, default!, default!));
+                return new Address(
+                    o.Key,
+                    txIds.Count(),
+                    balance,
+                    transactions);
+
+            }).ToDictionary(o => o.Hash);
         }
     }
 }

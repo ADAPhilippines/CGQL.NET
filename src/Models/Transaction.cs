@@ -7,10 +7,10 @@ namespace CGQL.NET.Models
         IEnumerable<TxOutput> Ins,
         IEnumerable<TxOutput> Outs, 
         Block Block,
-        long Fee,
-        long Amount,
+        decimal Fee,
+        decimal Amount,
         int BlockIndex,
         long Deposit,
-        long Ttl,
+        decimal Ttl,
         int Size);
 }

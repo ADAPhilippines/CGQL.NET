@@ -29,10 +29,12 @@ namespace CGQL.NET.Server
                 .AddQueryType(d => d.Name("Query"))
                     .AddTypeExtension<AddressQuery>()
                     .AddTypeExtension<TransactionQuery>()
+                    .AddTypeExtension<BlockQuery>()
                 .AddFiltering()
                 .AddType<AddressType>()
-                .AddDataLoader<AddressDataLoader>()
-                .AddDataLoader<TransactionDataLoader>();
+                .AddDataLoader<AddressByHashDataLoader>()
+                .AddDataLoader<TransactionByHashDataLoader>()
+                .AddDataLoader<TransactionByIdDataLoader>();
 
             services
                 .AddPooledDbContextFactory<CardanoDbContext>(options => options.UseNpgsql(Configuration.GetValue<string>("ConnectionString")));
