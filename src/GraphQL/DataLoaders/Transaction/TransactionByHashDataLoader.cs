@@ -34,7 +34,6 @@ namespace CGQL.NET.Server.GraphQL.DataLoaders
             var hashes = keys.Select(k => CGQLHelpers.HexStringToByteArray(k));
 
             var txesDbSet = dbContext.Txes
-                .Include(tx => tx.Block)
                 .Include(tx => tx.TxOuts)
                 .Include(tx => tx.InTxIns)
                     .ThenInclude(i => i.OutTx)

@@ -12,5 +12,6 @@ namespace CGQL.NET.Models
         int BlockIndex,
         long Deposit,
         decimal Ttl,
-        int Size);
+        int Size,
+        IEnumerable<TransactionMetadata> Metadata);
 }

@@ -32,9 +32,9 @@ namespace CGQL.NET.Server
                     .AddTypeExtension<BlockQuery>()
                 .AddFiltering()
                 .AddType<AddressType>()
-                .AddDataLoader<AddressByHashDataLoader>()
-                .AddDataLoader<TransactionByHashDataLoader>()
-                .AddDataLoader<TransactionByIdDataLoader>();
+                .AddType<TransactionType>()
+                .AddType<BlockType>()
+                .AddType<TransactionMetadataType>();
 
             services
                 .AddPooledDbContextFactory<CardanoDbContext>(options => options.UseNpgsql(Configuration.GetValue<string>("ConnectionString")));

@@ -11,11 +11,11 @@ using CGQL.NET.Models;
 
 namespace CGQL.NET.Server.GraphQL.DataLoaders
 {
-    public class TransactionByIdDataLoader : BatchDataLoader<long, Transaction>
+    public class TransactionMetadataByIdDataLoader : BatchDataLoader<long, TransactionMetadata>
     {
         private readonly IDbContextFactory<CardanoDbContext> _dbContextFactory;
 
-        public TransactionByIdDataLoader(
+        public TransactionMetadataByIdDataLoader(
             IBatchScheduler batchScheduler,
             IDbContextFactory<CardanoDbContext> dbContextFactory)
             : base(batchScheduler)
@@ -24,31 +24,27 @@ namespace CGQL.NET.Server.GraphQL.DataLoaders
                 throw new ArgumentNullException(nameof(dbContextFactory));
         }
 
-        protected override async Task<IReadOnlyDictionary<long, Transaction>> LoadBatchAsync(
+        protected override async Task<IReadOnlyDictionary<long, TransactionMetadata>> LoadBatchAsync(
             IReadOnlyList<long> keys,
             CancellationToken cancellationToken)
         {
             await using CardanoDbContext dbContext =
                 _dbContextFactory.CreateDbContext();
 
-            var txesDbSet = dbContext.Txes
-                .Include(tx => tx.Block)
-                .Include(tx => tx.TxOuts)
-                .Include(tx => tx.InTxIns)
-                    .ThenInclude(i => i.OutTx)
-                    .ThenInclude(o => o.TxOuts);
+            var txMetas = await (from txMeta in dbContext.TxMetadata
+                where keys.Contains(txMeta.Id)
+                select txMeta).ToListAsync(cancellationToken);
 
-            var txes = await (from tx in txesDbSet
-                where keys.Contains(tx.Id)
-                select tx).ToListAsync(cancellationToken);
+            var result = new Dictionary<long, TransactionMetadata>();
 
-            var transactions = TransactionDataLoaderHelpers.BuildTransactionsfromTxes(txes);
-
-            var result = new Dictionary<long, Transaction>();
-
-            foreach(var tx in txes)
+            foreach(var meta in txMetas)
             {
-                result.Add(tx.Id, transactions.Where(t => t.Hash == CGQLHelpers.ByteArrayToHexString(tx.Hash)).First());
+                result.Add(meta.Id, new TransactionMetadata(meta.Key, 
+                    meta.Json, 
+                    new Transaction(meta.TxId.ToString(),
+                        default!, default!, default!, default!,
+                        default!, default!, default!, default!, 
+                        default!, default!)));
             }
 
             return result;

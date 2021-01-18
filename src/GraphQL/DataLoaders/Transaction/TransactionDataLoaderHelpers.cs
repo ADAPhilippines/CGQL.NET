@@ -26,17 +26,24 @@ namespace CGQL.NET.Server.GraphQL.DataLoaders
                     o.Index,
                     hash
                 ));
+
+                var block = new Models.Block(tx.BlockId.ToString(), 
+                    default!, default!, default!, default!, default!, default!, default!, default!, default!);
+
+                var meta = new TransactionMetadata(tx.Id, default!, default!);
+                var txMetas = new List<TransactionMetadata>(){ meta };
                 return new Transaction(
                     hash,
                     ins,
                     outs,
-                    default!,
+                    block,
                     tx.Fee,
                     tx.OutSum,
                     tx.BlockIndex,
                     tx.Deposit,
                     tx.InvalidHereafter ?? 0m,
-                    tx.Size);
+                    tx.Size,
+                    txMetas);
             });
         } 
     }

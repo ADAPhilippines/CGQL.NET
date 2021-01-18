@@ -54,7 +54,7 @@ namespace CGQL.NET.Server.GraphQL.DataLoaders
                 var balance = (long)txOuts.Where(o1 => o1.Address == o.Key && o1.TxInId == 0).Sum(o1 => o1.Value);
 
                 var transactions = txIds.Select(id => new Transaction(id.ToString(), 
-                    default!, default!, default!, default!, default!, default!, default!, default!, default!));
+                    default!, default!, default!, default!, default!, default!, default!, default!, default!, default!));
                 return new Address(
                     o.Key,
                     txIds.Count(),

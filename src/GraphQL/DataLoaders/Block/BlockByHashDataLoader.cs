@@ -32,27 +32,13 @@ namespace CGQL.NET.Server.GraphQL.DataLoaders
 
             var hashes = keys.Select(k => CGQLHelpers.HexStringToByteArray(k));
 
-            var blocks = await (from block in dbContext.Blocks
+            var dbBlocks = await (from block in dbContext.Blocks
                 where hashes.Contains(block.Hash)
                 select block).ToListAsync(cancellationToken);
 
-            return blocks.GroupBy(b => b.Hash).Select(blockGroup =>
-            {
-                var hash = string.Concat(blockGroup.Key.Select(b1 => b1.ToString("x2")));
-                var block = blockGroup.First();
-                var merkelRoot = block.MerkelRoot != null ? string.Concat(block.MerkelRoot.Select(b1 => b1.ToString("x2"))) : default!;
-                return new Models.Block(hash,
-                    block.BlockNo ?? 0,
-                    block.EpochNo ?? 0,
-                    block.SlotNo ?? 0,
-                    default!,
-                    default!,
-                    block.Size,
-                    block.Time,
-                    merkelRoot,
-                    default!
-                );
-            }).ToDictionary(o => o.Hash);
+            var blocks = BlockDataLoaderHelpers.BuildBlocksfromDbBlocks(dbBlocks);
+
+            return blocks.ToDictionary(b => b.Hash);
         }
     }
 }
